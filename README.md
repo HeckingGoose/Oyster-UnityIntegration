@@ -10,4 +10,4 @@ The project contains the minimum required functionality to integrate this integr
 
 # Integrating into a project
 
-To add this integration into a project, download the `.unitypackage` file from the [releases](https://github.com/HeckingGoose/Oyster-UnityIntegration/releases/latest) section and extract it into a project. The example project above contains a few scripts should be read over to learn how to have your project communicate with Oyster (so that Oyster knows when to continue dialogue, or when to start a conversation).
+To add this integration into a project, download the `.unitypackage` file from the [releases](https://github.com/HeckingGoose/Oyster-UnityIntegration/releases/latest) section and extract it into a project, also be sure to grab a DLL from the main repository [here](https://github.com/HeckingGoose/Oyster/releases/latest). The example project above contains a few scripts should be read over to learn how to have your project communicate with Oyster (so that Oyster knows when to continue dialogue, or when to start a conversation).
