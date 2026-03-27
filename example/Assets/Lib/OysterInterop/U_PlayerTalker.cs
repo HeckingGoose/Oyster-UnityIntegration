@@ -28,7 +28,13 @@ namespace Assets.Lib.OysterInterop
         private SpeechDisplay _speechDisplay;
 
         // On Start
-        void Start()
+        private void Start()
+        {
+            if (_playerTalker == null) MakeTalker();
+        }
+
+        // Private Methods
+        private void MakeSpeechDisplay()
         {
             // Make speech display
             _speechDisplay = new SpeechDisplay(
@@ -38,6 +44,10 @@ namespace Assets.Lib.OysterInterop
                 _mainTextBacking,
                 _continuePrompt
                 );
+        }
+        private void MakeTalker()
+        {
+            if (_speechDisplay == null) MakeSpeechDisplay();
 
             // Get camera
             A_Camera camera = null;
@@ -56,7 +66,11 @@ namespace Assets.Lib.OysterInterop
         /// </summary>
         public PlayerTalker Talker
         {
-            get { return _playerTalker; }
+            get
+            {
+                if (_playerTalker == null) MakeTalker();
+                return _playerTalker;
+            }
         }
     }
 }

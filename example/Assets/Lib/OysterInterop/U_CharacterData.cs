@@ -22,7 +22,13 @@ namespace Assets.Lib.OysterInterop
         protected CharacterData _characterData;
 
         // On start
-        protected virtual void Awake()
+        protected virtual void Start()
+        {
+            if (_characterData == null) MakeData();
+        }
+
+        // Private Methods
+        private void MakeData()
         {
             // Make character data
             _characterData = new CharacterData(
@@ -37,7 +43,11 @@ namespace Assets.Lib.OysterInterop
         // Accessors
         public A_CharacterData Data
         {
-            get { return _characterData; }
+            get
+            {
+                if (_characterData == null) MakeData();
+                return _characterData;
+            }
         }
     }
 }

@@ -19,7 +19,20 @@ namespace Assets.Lib.OysterInterop
         private SceneScript _sceneScript;
 
         // On Start
-        void Awake()
+        private void Start()
+        {
+            // Make if null
+            if (_sceneScript == null) MakeScript();
+        }
+        // Every frame
+        private void Update()
+        {
+            // Give Oyster a heartbeat
+            OysterMain.Update(Time.deltaTime);
+        }
+
+        // Private Methods
+        private void MakeScript()
         {
             // Make show and hides
             _hiders = new ShowAndHide[_hideInConversation.Length];
@@ -38,12 +51,6 @@ namespace Assets.Lib.OysterInterop
             // Log a cheeky message
             OysterLogger.DebugMessage("Scene script registered!", Oyster.DebugOut.Severity.Log);
         }
-        // Every frame
-        private void Update()
-        {
-            // Give Oyster a heartbeat
-            OysterMain.Update(Time.deltaTime);
-        }
 
         // Public Methods
         /// <summary>
@@ -51,6 +58,7 @@ namespace Assets.Lib.OysterInterop
         /// </summary>
         public void StartChat(PlayerTalker playerTalker, CharacterTalker characterTalker)
         {
+            if (_sceneScript == null) MakeScript();
             _sceneScript.StartChat(playerTalker, characterTalker);
         }
     }

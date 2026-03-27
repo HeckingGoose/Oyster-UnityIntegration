@@ -1,0 +1,17 @@
+# Test script for Oyster Unity example
+
+# Tell Oyster what we want
+Meta [version="4.1.0", game="Base"]
+
+# We gonna set some magic numbers
+Set_IntVar ["Magic", 15]
+Set_IntVar ["mumblesPerSecond", 2]
+
+# And now onto the bit that you can actually see in-game
+Act_Speak ["Hello, I am a test character"]
+Set_Looker ["ToTheLeft"]
+Act_Speak ["Look over there!"]
+Set_Looker ["default"]
+Act_Speak ["And back over here!"]
+Act_Append ["\nWanna hear a magic number?"]
+Act_Speak [$"{Magic}."]

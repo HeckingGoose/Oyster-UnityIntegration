@@ -18,7 +18,13 @@ namespace Assets.Lib.OysterInterop
         private void Start()
         {
             // Make material
-            var _ = Material;
+            if (_materialInternal == null) MakeMaterial();
+        }
+
+        // Private Methods
+        private void MakeMaterial()
+        {
+            _materialInternal = new Material_Internal(_name, _material);
         }
 
         // Accessors
@@ -26,10 +32,7 @@ namespace Assets.Lib.OysterInterop
         {
             get
             {
-                if (_materialInternal == null)
-                {
-                    _materialInternal = new Material_Internal(_name, _material);
-                }
+                if (_materialInternal == null) MakeMaterial();
                 return _materialInternal;
             }
         }

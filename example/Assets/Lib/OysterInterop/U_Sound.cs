@@ -15,7 +15,7 @@ namespace Assets.Lib.OysterInterop
         private SoundInternal _sound;
 
         // Unity Methods
-        private void Awake()
+        private void Start()
         {
             // Make sound
             if (_sound == null) _sound = new SoundInternal(_name, _clip);

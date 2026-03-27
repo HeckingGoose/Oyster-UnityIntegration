@@ -18,7 +18,13 @@ namespace Assets.Lib.OysterInterop
         private CharacterMaterial _characterMaterial;
 
         // On start
-        private void Awake()
+        private void Start()
+        {
+            if (_characterMaterial == null) MakeMaterial();
+        }
+
+        // Private Methods
+        private void MakeMaterial()
         {
             // Read in materials
             Material_Internal[] m = new Material_Internal[_materials.Length];
@@ -30,7 +36,11 @@ namespace Assets.Lib.OysterInterop
         // Accessors
         public A_CharacterSprite Manager
         {
-            get { return _characterMaterial; }
+            get
+            {
+                if (_characterMaterial == null) MakeMaterial();
+                return _characterMaterial;
+            }
         }
     }
 }

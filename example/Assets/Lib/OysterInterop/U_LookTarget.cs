@@ -15,7 +15,14 @@ namespace Assets.Lib.OysterInterop
         private A_Looker _looker;
 
         // On start
-        private void Awake()
+        private void Start()
+        {
+            // Make if null
+            if (_looker == null) MakeLooker();
+        }
+
+        // Private Variables
+        private void MakeLooker()
         {
             // Set to self if null
             if (_target == null) _target = gameObject;
@@ -30,6 +37,13 @@ namespace Assets.Lib.OysterInterop
         // Accessors
         public string Name { get { return _name; } set { _name = value; } }
         public GameObject Target { get { return _target; } }
-        public A_Looker Looker { get { return _looker; } }
+        public A_Looker Looker
+        {
+            get
+            {
+                if (_looker == null) MakeLooker();
+                return _looker;
+            }
+        }
     }
 }

@@ -16,7 +16,13 @@ namespace Assets.Lib.OysterInterop
         private CharacterSound _characterSound;
 
         // Unity Methods
-        private void Awake()
+        private void Start()
+        {
+            if (_characterSound == null) MakeSound();
+        }
+
+        // Private Methods
+        private void MakeSound()
         {
             // Make sound
             if (_sounds == null) _characterSound = new CharacterSound(_soundPlayer.SoundPlayer);
@@ -30,6 +36,13 @@ namespace Assets.Lib.OysterInterop
         }
 
         // Accessors
-        public CharacterSound CharacterSound { get { return _characterSound; } }
+        public CharacterSound CharacterSound
+        {
+            get
+            {
+                if (_characterSound == null) MakeSound();
+                return _characterSound;
+            }
+        }
     }
 }

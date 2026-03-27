@@ -23,6 +23,12 @@ namespace Assets.Lib.OysterInterop
         // On Start
         protected virtual void Start()
         {
+            if (_talker == null) MakeTalker();
+        }
+
+        // Private Methods
+        private void MakeTalker()
+        {
             // Get component
             A_CharacterSprite spriteManager = null;
             if (!TryGetComponent(out _spriteManager))
@@ -64,6 +70,13 @@ namespace Assets.Lib.OysterInterop
                 return _characterSound.CharacterSound;
             }
         }
-        public CharacterTalker Talker { get { return _talker; } }
+        public CharacterTalker Talker
+        {
+            get
+            {
+                if (_talker == null) MakeTalker();
+                return _talker;
+            }
+        }
     }
 }
