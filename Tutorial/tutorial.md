@@ -42,7 +42,7 @@ In the window that appears, leave all items ticked and select 'Import' in the bo
 
 For a quick explanation on the two main folders:
 
-- **Lib**: Contains the Unity implementation or Oyster, with scripts intended for direct use in a scene being prefaced with 'U_',
+- **Lib**: Contains the Unity implementation for Oyster, with scripts intended for direct use in a scene being prefaced with 'U_',
 - **Editor**: Contains an editor script that Addressables uses to know how to handle the `.osf` file extension that Oyster uses for its scripts.
 
 ![An image of a lot of compile errors](Img/sec3_img2.png)
@@ -55,46 +55,60 @@ Now your blank project has one hundred and eight compile errors. This is due to 
 
 As can be seen, once the DLL has been added, all compile errors should be gone. If this is not the case, then please let Jesus take the wheel as you write out an issue on this repository.
 
-## Components to familiarize yourself with
+## Setting the scene
 
-This section will show screenshots of some GameObjects filled out with Oyster components.
+To start with, let's remove all objects from the scene and then create a new GameObject for the player and place a `U_PlayerTalker` script on it.
 
-### Player
+![An image showing the start of a player object](Img/sec4_img1.png)
 
-#### Main Player
+This script acts as a central way for Oyster to access functionality relating to the player. Let's now add a camera to the player by creating a new GameObject that will be a child of the player object, and giving it a `Camera` component, then a `U_Camera` component so that Oyster can access the camera's functionality.
 
-![An image showing the player talker](Img/sec4_img5.png)
+![An image showing the camera object](Img/sec4_img2.png)
 
-The main player talker is relatively simple, with it simply acting as a container for all of the components which will be discussed below.
+Now we can start work on a speech display for the player, to start with let's create a new canvas to place the components on, and then on that canvas create the following structure:
 
-#### Camera
+![An image showing the current state of the scene](Img/sec4_img3.png)
 
-![An image showing an Oyster camera](Img/sec4_img1.png)
+Here is a quick discussion of each of these components:
 
-For Oyster, a camera only requires the `U_Camera` script. The purpose of this script is for 'Lookers' to work within Oyster. If Looker functionality is not wanted (take for example a 2D game where the camera cannot turn to face the character being spoken to), this component can be ignored, and on the player talker can be left as null.
+- **SpeechDisplay**: The root GameObject for the speech display, does not need to contain any extra scripts,
+- **MainTextBack**: An image that will be behind the main text that Oyster uses to show dialogue on screen, add a `U_ShowAndHide` to this GameObject,
+- **MainText**: The aforementioned main text that Oyster uses to show dialogue on screen, add a `U_TextField` to this GameObject,
+- **NameTextBack**: An image that will be behind the text that Oyster uses to show a character's name, add a `U_ShowAndHide` to this GameObject,
+- **NameText**: The aforementioned text that Oyster uses to show a character's name, add a `U_TextField` to this GameObject,
+- **ContinuePrompt**: This component is not absolutely required for the speech display, but when Oyster is waiting for input from the user (as in to click to continue text), this GameObject will be toggled between shown and hidden, add a `U_ShowAndHide` to this GameObject.
 
-#### Speech Display
+These components may be laid out anywhere on the canvas, with most of them actually being optional (for example you may not want to have a NameText), for the sake of this tutorial, they will be laid out as shown below (where the top text field and box are the NameText and the bottom box and text field are the MainText, with the black square being the continue prompt):
 
-A speech display is a set of objects (A name text, main text, name text backing, main text backing and a continue prompt) that when combined, create a display that Oyster can use to display the contents of the scripts it processes.
+![An image showing a speech display](Img/sec4_img5.png)
 
-The speech display for the context of this tutorial will be made from a set of UI elements as seen below:
+Now that we have our speech display set-up properly, we can start dragging these components onto their respective places on the player talker, creating this:
 
-![An image of the recommended object structure](Img/sec4_img2.png)
+![An image showing the completed player talker](Img/sec4_img4.png)
 
-Shown above is a recommended object structure for a speech display.
+Congratulations! You have set up a player for use with Oyster. Next on the agenda is to set-up a scene script, which is as simple as creating a blank GameObject anywhere in the scene and adding a `U_SceneScript` component to it:
 
-![An image of the speech display in the scene](Img/sec4_img3.png)
+![An image showing a blank scene script](Img/sec4_img6.png)
 
-Shown above is a recommended layout for the speech display in the scene (name text is at top, main text is at bottom, continue prompt is black square).
+For this script, nothing needs to be changed for it to work, however an explanation of each component of it will be given:
 
-![An image of the Oyster components for the speech display](Img/sec4_img4.png)
+- **Hide in Conversation**: This is an array of `U_ShowAndHide` that will be hidden when a conversation is started, and shown when a conversation ends. The purpose being to hide any unwanted UI elements when a conversation is started,
+- **Look Targets**: This is an array of look targets that Oyster will reference when running the [Set_Looker](https://oyster.abulman.com/writing/supportedcommands/base/set_looker) command.
 
-Shown above is an image of the 'SpeechDisplay' object, which has the related Oyster scripts that are passed into the player talker.
+```csharp
+...
 
-### Character
+private void Update()
+{
+    // Give Oyster a heartbeat
+    OysterMain.Update(Time.deltaTime);
+}
 
+...
+```
 
+Taking a look inside of the scene script, it can be seen that it calls the `Update` function of Oyster. This acts as the heartbeat of Oyster and is what allows Oyster to frequently run its `Tick` function. Effectively, having more than one scene script in a scene would end up with this function being called too frequently, so please don't do that. Or do. It's your choice.
 
-### Scene
+(I aint got past this point in makin it yet m8. sozzo)
 
 ## Writing your first script
