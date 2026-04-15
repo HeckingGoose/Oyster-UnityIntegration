@@ -17,7 +17,9 @@ To add this integration into a project, download the `.unitypackage` file from t
 
 This integration does not ship with the core Oyster DLL, please download the latest release of the core Oyster library from [here](https://github.com/HeckingGoose/Oyster/releases/latest) and ensure it is placed within your project's 'Assets' folder.
 
-For a more in-depth tutorial for setting up this integration with a blank Unity project, please see the [tutorial](Tutorial/tutorial.md)
+## Tutorial
+
+For a more in-depth tutorial for setting up this integration with a blank Unity project, please see the [tutorial](Tutorial/tutorial.md).
 
 # Testing it out
 
