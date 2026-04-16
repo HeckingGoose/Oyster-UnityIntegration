@@ -49,7 +49,7 @@ For a quick explanation on the two main folders:
 
 And..... Congratulations!
 
-Now your blank project has one hundred and eight compile errors. This is due to the project not containing the engine-agnostic DLL. Please download the latest release of the DLL from [here](https://github.com/HeckingGoose/Oyster/releases/latest) and drag it into the assets folder of the project.
+Now your blank project has around a hundred compile errors. This is due to the project not containing the engine-agnostic DLL. Please download the latest release of the DLL from [here](https://github.com/HeckingGoose/Oyster/releases/latest) and drag it into the assets folder of the project.
 
 ![An image of the compiler errors now gone](Img/sec3_img3.png)
 
@@ -144,3 +144,83 @@ Now for the final step, simply drag the looker you created earlier onto the char
 Next we'll move onto writing your first script.
 
 ## Writing your first script
+
+To start with, let's actually create the `.osf` file that our previously made character points to. To do this, let's create the relevant folder structure and then create the `.osf` file, as seen below:
+
+![An image showing the folder structure for Oyster scripts](Img/sec5_img1.png)
+
+Next let's open this file in a text editor, for this tutorial Visual Studio Code will be used, as there exists an [Oyster Linter](https://marketplace.visualstudio.com/items?itemName=AnActualPan.oyster-linter) extension that can make writing scripts easier.
+
+For this tutorial, the below script will be used, for information on what each of these commands do and how to lay out a script, see these relevant sections:
+
+- [Built-in Commands](https://oyster.abulman.com/writing/supportedcommands/base),
+- [Writing a script](https://oyster.abulman.com/writing/writingscripts/).
+
+![An image showing a written script](Img/sec5_img2.png)
+
+Feel free to take some time to read the documentation for all of these commands, to understand their purpose. In the next section we will write a simple script to start a conversation and handle user input.
+
+Now we need to let Addressables know about this script, to do this, navigate to the script in the project window and select it in the inspector. Tick the 'Addressable' tick box near the name of the script. Now Addressables will generate a name for the script (by default it is the script path and file name).
+
+![An image showing a text asset being made addressable](Img/sec6_img4.png)
+
+Note that the path of this script matches the constructed path that we defined in the character data earlier on.
+
+## Starting a conversation
+
+Firstly, create a new MonoBehaviour script with any name you wish in your assets folder and fill it out with the below code:
+
+```csharp
+using Oyster.Core;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using Assets.Lib.OysterInterop;
+
+public class OysterManager : MonoBehaviour
+{
+    // Editor Variables
+    [Header("Oyster Objects")]
+    [SerializeField]
+    private U_CharacterTalker _character;
+    [SerializeField]
+    private U_SceneScript _scene;
+    [SerializeField]
+    private U_PlayerTalker _player;
+
+    private InputAction _nudgeAction;
+    
+    // Unity Methods
+    private void Start()
+    {
+        // Start the chat with Oyster
+        _scene.StartChat(_player.Talker, _character.Talker);
+
+        // Subscribe to input
+        _nudgeAction = InputSystem.actions.FindActionMap("Player").FindAction("Attack");
+        _nudgeAction.performed += Nudge;
+    }
+    private void OnDestroy()
+    {
+        _nudgeAction.performed -= Nudge;
+    }
+
+    // Private Methods
+    private void Nudge(InputAction.CallbackContext obj)
+    {
+        // Nudge Oyster
+        OysterMain.Nudge();
+    }
+}
+```
+
+The 'Start' method in this code will attempt to start a conversation between the player and the character on the first frame. This script also handles calling the 'Nudge' action within Oyster when the default Unity control for the player's attack is used (left mouse button by default).
+
+Now all you need to do is add this script to any object in the scene and pass in the related references as editor parameters. This is shown below:
+
+![An image showing the test script](Img/sec6_img3.png)
+
+Once this is set-up, the scene can then be ran, and if every step was followed correctly, you should see what is pictured below:
+
+![An image showing the final product](Img/sec6_img5.png)
+
+Congratulations! If you are not seeing this and are instead seeing a whole lot of runtime errors, god help you!
