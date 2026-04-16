@@ -158,8 +158,6 @@ For this tutorial, the below script will be used, for information on what each o
 - [Built-in Commands](https://oyster.abulman.com/writing/supportedcommands/base),
 - [Writing a script](https://oyster.abulman.com/writing/writingscripts/).
 
-![An image showing a written script](Img/sec5_img2.png)
-
 ```py
 # Let Oyster know what we expect from it
 Meta [version="4.1.0", game="Base"]
