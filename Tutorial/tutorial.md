@@ -14,7 +14,7 @@ Once the project is open, ensure the Addressables and TextMeshPro packages are a
 
 In the title bar of the Unity editor, select 'Window &rarr; Package Management &rarr; Package Manager'.
 
-In the furthest left section of the window that opens, select 'Unity Registry'. Then in the search bar, search for 'Addressables'.
+In the furthest left section of the window that opens, select 'Unity Registry'. Then in the search bar, search for 'Addressables' (in versions of Unity other than Unity 6, the package manager window may differ visually).
 
 ![An image showing addressables in the package manager](Img/sec2_img1.png)
 
@@ -92,7 +92,7 @@ Congratulations! You have set up a player for use with Oyster. Next on the agend
 
 For this script, nothing needs to be changed for it to work, however an explanation of each component of it will be given:
 
-- **Hide in Conversation**: This is an array of `U_ShowAndHide` that will be hidden when a conversation is started, and shown when a conversation ends. The purpose being to hide any unwanted UI elements when a conversation is started,
+- **Hide in Conversation**: This is an array of `U_ShowAndHide` that will be hidden when a conversation is started, and shown when a conversation ends. The purpose being to hide any unwanted UI elements during a conversation. The speech display show and hides do not need adding to this array, as they are managed automatically from their references within the player talker,
 - **Look Targets**: This is an array of look targets that Oyster will reference when running the [Set_Looker](https://oyster.abulman.com/writing/supportedcommands/base/set_looker) command.
 
 ```csharp
@@ -115,6 +115,8 @@ Next we will set-up a basic character in the scene, to do this, create this obje
 
 In the above image 'Floor' is simply a plane at location (0,0,0), 'Character' is an empty at location (1.1,0,3.204), 'Mesh' is a 3D capsule object at location (0,1,0), 'Oyster' is an empty where we will place our Oyster-related scripts and 'Looker' is an empty at location (0,1.5,0) where we will be placing a looker script that the camera can turn to when in conversation.
 
+The mesh is not absolutely required, however generally characters are visually there in a game, so having this capsule will do fine as a way to represent the character in the scene.
+
 Next, create the following scripts on the 'Oyster' GameObject:
 
 ![An image showing a blank character set-up](Img/sec4_img8.png)
@@ -128,13 +130,13 @@ Now add a `U_LookTarget` script to the 'Looker' GameObject. Feel free to give it
 
 ![An image of a set-up looker](Img/sec4_img9.png)
 
-This looker can be added to the scene script if - for example - you wanted to be able to switch to it via the [Set_Looker](https://oyster.abulman.com/writing/supportedcommands/base/set_looker) command. However, that is not required unless that is the intention, as Oyster will fetch the character's looker from its character talker script.
+This looker can be added to the scene script if - for example - you wanted to be able to switch to it via the [Set_Looker](https://oyster.abulman.com/writing/supportedcommands/base/set_looker) command. However, that is not required unless that is the intention, as Oyster will fetch the character's looker from its character talker script. As well as that, the 'target' of the looker will default to the object it is currently on, which is identical to what we have set-up here. However, it can be a good habit to build for these links to be explicitly defined in the editor.
 
 Next we will fill out the character data script with some information, and then explain what each parameter means:
 
 ![An image showing a basic character setup](Img/sec4_img10.png)
 
-- ***Name**: This is the name that will be shown in the 'NameText' field of the speech display when speaking to this character,
+- **Name**: This is the name that will be shown in the 'NameText' field of the speech display when speaking to this character,
 - **Name Colour**: This is the colour that the above name will be drawn with in the 'NameText' section of the speech display,
 - **Time Between Characters**: This is the amount of time in seconds that Oyster will wait before pushing a new character to the 'MainText' display when running either [Act_Speak](https://oyster.abulman.com/writing/supportedcommands/base/act_speak) or [Act_Append](https://oyster.abulman.com/writing/supportedcommands/base/act_append),
 - **Script Name & Script Path**: This bit of functionality can be overridden with any structure you wish, by creating alternate implementations of `A_CharacterData`, however in this standard implementation, these two parameters are combined to create a string of the form: `{ScriptPath}{ScriptName}.osf`, so in this example, the path would be `Assets/RuntimeData/Scripts/TestScript.osf`.
@@ -157,6 +159,29 @@ For this tutorial, the below script will be used, for information on what each o
 - [Writing a script](https://oyster.abulman.com/writing/writingscripts/).
 
 ![An image showing a written script](Img/sec5_img2.png)
+
+```py
+# Let Oyster know what we expect from it
+Meta [version="4.1.0", game="Base"]
+
+# Define a variable so Oyster won't complain about it not being defined
+# (This variable is used by Act_Speak and Act_Append for their audio, and so changing it will have no noticeable difference here as no sound will be played back)
+Set_IntVar ["mumblesPerSecond", 6]
+
+# Set Marker
+Line_Marker ["Reset"]
+
+# Let character say hi
+Act_Speak ["Hello I am a character!"]
+Act_Append ["\nI am here to say hello to you!"]
+Set_FOV [20]
+Act_Speak ["<size=300%>BOOO!"]
+Set_FOV [60]
+Act_Speak ["I scared you didn't I?"]
+
+# Loop
+Jump_To ["Reset"]
+```
 
 Feel free to take some time to read the documentation for all of these commands, to understand their purpose. In the next section we will write a simple script to start a conversation and handle user input.
 
@@ -213,7 +238,7 @@ public class OysterManager : MonoBehaviour
 }
 ```
 
-The 'Start' method in this code will attempt to start a conversation between the player and the character on the first frame. This script also handles calling the 'Nudge' action within Oyster when the default Unity control for the player's attack is used (left mouse button by default).
+The 'Start' method in this code will attempt to start a conversation between the player and the character on the first frame. This script also handles calling the 'Nudge' action within Oyster when the default Unity control for the player's attack is used (left mouse button by default) (in versions of Unity prior to Unity 6, the InputSystem package may need to be installed from the package manager).
 
 Now all you need to do is add this script to any object in the scene and pass in the related references as editor parameters. This is shown below:
 
