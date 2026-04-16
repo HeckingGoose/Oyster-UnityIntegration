@@ -109,6 +109,38 @@ private void Update()
 
 Taking a look inside of the scene script, it can be seen that it calls the `Update` function of Oyster. This acts as the heartbeat of Oyster and is what allows Oyster to frequently run its `Tick` function. Effectively, having more than one scene script in a scene would end up with this function being called too frequently, so please don't do that. Or do. It's your choice.
 
-(I aint got past this point in makin it yet m8. sozzo)
+Next we will set-up a basic character in the scene, to do this, create this object structure in the scene hierarchy:
+
+![An image showing the current scene hierarchy](Img/sec4_img7.png)
+
+In the above image 'Floor' is simply a plane at location (0,0,0), 'Character' is an empty at location (1.1,0,3.204), 'Mesh' is a 3D capsule object at location (0,1,0), 'Oyster' is an empty where we will place our Oyster-related scripts and 'Looker' is an empty at location (0,1.5,0) where we will be placing a looker script that the camera can turn to when in conversation.
+
+Next, create the following scripts on the 'Oyster' GameObject:
+
+![An image showing a blank character set-up](Img/sec4_img8.png)
+
+In the implementation there also exist two other scripts, which are example implementations of additional Oyster functionality, but are not required for a conversation to function, explanations of them are below:
+
+- **U_CharacterMaterial**: An example implementation of the sprite swapping triggered by [Set_Sprite](https://oyster.abulman.com/writing/supportedcommands/base/set_sprite) that uses a MeshRenderer and Materials to implement the sprite swapping. This script can be used as a reference for implementing the same functionality with sprites for example,
+- **U_CharacterSound**: An example implementation of the sound playback functionality that Oyster uses with commands such as [Act_Speak](https://oyster.abulman.com/writing/supportedcommands/base/act_speak).
+
+Now add a `U_LookTarget` script to the 'Looker' GameObject. Feel free to give it any name you wish, and optionally drag the 'Looker' object as the 'Target' reference, if you do not do this, the script will default to the object that it is currently on for its target position. In this set-up, this has no functional difference, but is relevant to mention.
+
+![An image of a set-up looker](Img/sec4_img9.png)
+
+This looker can be added to the scene script if - for example - you wanted to be able to switch to it via the [Set_Looker](https://oyster.abulman.com/writing/supportedcommands/base/set_looker) command. However, that is not required unless that is the intention, as Oyster will fetch the character's looker from its character talker script.
+
+Next we will fill out the character data script with some information, and then explain what each parameter means:
+
+![An image showing a basic character setup](Img/sec4_img10.png)
+
+- ***Name**: This is the name that will be shown in the 'NameText' field of the speech display when speaking to this character,
+- **Name Colour**: This is the colour that the above name will be drawn with in the 'NameText' section of the speech display,
+- **Time Between Characters**: This is the amount of time in seconds that Oyster will wait before pushing a new character to the 'MainText' display when running either [Act_Speak](https://oyster.abulman.com/writing/supportedcommands/base/act_speak) or [Act_Append](https://oyster.abulman.com/writing/supportedcommands/base/act_append),
+- **Script Name & Script Path**: This bit of functionality can be overridden with any structure you wish, by creating alternate implementations of `A_CharacterData`, however in this standard implementation, these two parameters are combined to create a string of the form: `{ScriptPath}{ScriptName}.osf`, so in this example, the path would be `Assets/RuntimeData/Scripts/TestScript.osf`.
+
+Now for the final step, simply drag the looker you created earlier onto the character talker, and you'll have officially created all three main components of a scene for Oyster!
+
+Next we'll move onto writing your first script.
 
 ## Writing your first script
